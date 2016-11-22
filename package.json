@@ -1,0 +1,26 @@
+{
+  "name": "VideoStreamr",
+  "version": "1.0.0",
+  "description": "Video Streaming Server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RonilM/VideoStreamr.git"
+  },
+  "keywords": [
+    "video",
+    "stream",
+    "internet",
+    "services"
+  ],
+  "author": "Ronil Mehta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RonilM/VideoStreamr/issues"
+  },
+  "homepage": "https://github.com/RonilM/VideoStreamr"
+}

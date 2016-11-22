@@ -1,0 +1,17 @@
+{
+
+	"routes": [
+		{
+			"path":"/",
+			"requestType":"GET",
+			"action": "index"
+		},
+		{
+			"path":"/index",
+			"requestType":"GET",
+			"action": "index"
+		}
+	]
+
+
+}
