@@ -2,14 +2,19 @@
 
 	"routes": [
 		{
-			"path":"/",
-			"requestType":"GET",
+			"path": "/",
+			"requestType": "GET",
 			"action": "index"
 		},
 		{
-			"path":"/index",
-			"requestType":"GET",
+			"path": "/index",
+			"requestType": "GET",
 			"action": "index"
+		},
+		{
+			"path": "/stream",
+			"requestType": "POST",
+			"action": "stream"
 		}
 	]
 
