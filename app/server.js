@@ -1,7 +1,54 @@
 const http = require('http');
 const url = require('url');
-
+const ws = require("nodejs-websocket")
 	
+var STREAM_SECRET = process.argv[2],
+	STREAM_PORT = process.argv[3] || 8082,
+	WEBSOCKET_PORT = process.argv[4] || 8084,
+	STREAM_MAGIC_BYTES = 'jsmp'; // Must be 4 bytes
+
+var width = 320,
+	height = 240;
+
+exports.startWSServer = () => {
+	
+	var srv = ws.createServer(function (conn) {
+
+		console.log("Created");
+		var streamHeader = new Buffer(8);
+		streamHeader.write(STREAM_MAGIC_BYTES);
+		streamHeader.writeUInt16BE(width, 4);
+		streamHeader.writeUInt16BE(height, 6);
+		conn.send(streamHeader, {binary:true});
+
+		console.log( 'New WebSocket Connection ('+srv.connections.length+' total)' );
+
+	    conn.on("close", function (code, reason) {
+	        console.log( 'Disconnected WebSocket ('+srv.connections.length+' total)' );
+	    });
+
+	    conn.on("error", (err) => {
+		    console.log("Caught flash policy server socket error: ");
+		    console.log(err.stack);
+		});
+	});
+
+	srv.broadcast = function(data, opts) {
+
+		srv.connections.forEach(function (conn) {
+			conn.send(data,opts);
+		});
+	}
+
+	srv.listen(8001);
+
+
+
+
+	return srv;
+
+}
+
 exports.startServer = (config,routeObj,actionObj) => {
 	http.createServer( (request,response) => {
 
@@ -18,6 +65,8 @@ exports.startServer = (config,routeObj,actionObj) => {
 
 
 	}).listen(4321);
+
+	
 
 	console.log("Running server at http://localhost:4321/");
 }

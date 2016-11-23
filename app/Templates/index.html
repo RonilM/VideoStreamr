@@ -1,2 +1,53 @@
 
 <h1>Test</h1>
+
+<div id="vidDiv">
+	<canvas id="videoCanvas" width="640" height="480"></canvas>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://localhost:4321/getjs?name=jsmpg.js"></script>
+
+<script>
+	
+	var canvas = document.getElementById('videoCanvas');
+	//var divi = document.getElementById('vidDiv');
+	
+	var client = new WebSocket( 'ws://localhost:8001/' );
+	var player = new jsmpeg(client, {canvas:canvas});
+
+
+
+	$.ajax({
+	  url: "streamfile",
+	  data: {
+	  			'name': 'webcam',//'Carousselle.mp4', //'webcam',
+	  		}
+	}).done(function(data) {});
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -13,7 +13,11 @@ fs.readFile(configFilePath, 'utf8', function (err, data) {
 	config = JSON.parse(data);
 	var routeObj = routes(config);
 	routeObj.registerRoutesFromConfig();
-	var actionObj = actions(config);
+
+
+	var wsserver = server.startWSServer();
+
+	var actionObj = actions(config,wsserver);
 
 	server.startServer(config,routeObj,actionObj);
 });

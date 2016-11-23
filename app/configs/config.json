@@ -19,7 +19,13 @@
 		{
 			"path": "/streamfile",
 			"requestType": "GET",
-			"action": "streamFile"
+			"action": "streamfile"
+		},
+
+		{
+			"path": "/getjs",
+			"requestType": "GET",
+			"action": "getjs"
 		}
 	]
 

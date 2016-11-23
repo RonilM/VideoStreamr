@@ -2,18 +2,16 @@ const views = require('./views');
 const url = require('url');
 const util = require('util');
 const exec = require('child_process').exec;
-var _videos = {};//require('memory-cache');
-//var child = 0;
+const fs = require('fs');
 
-module.exports = (_config) => {
+module.exports = (_config,_wsserver) => {
 
 	var config = _config;
+	var wsserver = _wsserver;
 
 	return {
 
 		index: (request,response) => {
-
-			//var urlObj = url.parse(`http://${request.url}`);
 
 			views.getView('index',response,(data) => {
 				response.end(data);
@@ -23,48 +21,48 @@ module.exports = (_config) => {
 
 		},
 
-		streamFile: (request,response) => {
+		streamfile: (request,response) => {
 			
 			var urlObj = url.parse(request.url, true);
 			var query = urlObj.query;
 			var vidName = query.name;
 			var idx = query.index;
-			var video = _videos[vidName];
+			var cmd = (vidName == 'webcam')?"ffmpeg -f avfoundation -i \"0\" -target pal-vcd http://localhost:4321/stream":"ffmpeg -i ./app/data/"+vidName+" -f mpeg1video -framerate 30 http://localhost:4321/stream?name="+vidName;
+			exec(cmd, function (error, stdout, stderr) {
+			  console.log('stdout: ' + stdout);
+			  console.log('stderr: ' + stderr);
+			  if (error !== null) {
+			    console.log('exec error: ' + error);
+			  }
+			});
 
-			response.writeHead(200,{'Content-Type':'html'});
-			
-			if(!video) {
-				exec("ffmpeg -i ./app/data/"+vidName+" -f mpeg1video http://localhost:4321/stream?name="+vidName, function (error, stdout, stderr) {
-				  console.log('stdout: ' + stdout);
-				  console.log('stderr: ' + stderr);
-				  if (error !== null) {
-				    console.log('exec error: ' + error);
-				  }
-				});
-			}
-
-			response.end("Start streaming "+vidName);
+			response.end("");
 		},
 
 		stream: (request,response) => {
 			response.connection.setTimeout(0);
-			var urlObj = url.parse(request.url, true);
-			var query = urlObj.query;
-			var vidName = query.name;
-			//console.log(vidName);
-			//console.log(request.mimeType);
 			var body = [];
 			request.on('data', function(chunk) {
-			  body.push(chunk);
+			  wsserver.broadcast(chunk, {binary:true});
 			}).on('end', function() {
-			  	body = Buffer.concat(body).toString();
-			  	_videos[vidName] = body;
-			  	//console.log(_videos);
-				//console.log("*******2");
+				wsserver.close();
+				response.end("");
 			});
 
 
 
+		},
+
+		getjs: (request,response) => {
+
+			var urlObj = url.parse(request.url, true);
+			var query = urlObj.query;
+			var vidName = query.name;
+			fs.readFile('app/Templates/'+vidName, 'utf8', function (err, data) {
+				if (err) throw err;
+				response.writeHead(200,{'Content-Type':'html'});
+				response.end(data);
+			});
 		}
 	};
 
