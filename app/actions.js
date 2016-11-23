@@ -30,8 +30,9 @@ module.exports = (_config) => {
 			var vidName = query.name;
 			var idx = query.index;
 			var video = _videos[vidName];
-			//console.log(_videos);
-			//console.log("*******");
+
+			response.writeHead(200,{'Content-Type':'html'});
+			
 			if(!video) {
 				exec("ffmpeg -i ./app/data/"+vidName+" -f mpeg1video http://localhost:4321/stream?name="+vidName, function (error, stdout, stderr) {
 				  console.log('stdout: ' + stdout);
