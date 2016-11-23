@@ -2,10 +2,8 @@ const http = require('http');
 const url = require('url');
 const ws = require("nodejs-websocket")
 	
-var STREAM_SECRET = process.argv[2],
-	STREAM_PORT = process.argv[3] || 8082,
-	WEBSOCKET_PORT = process.argv[4] || 8084,
-	STREAM_MAGIC_BYTES = 'jsmp'; // Must be 4 bytes
+
+var STREAM_MAGIC_BYTES = 'jsmp'; // Must be 4 bytes
 
 var width = 320,
 	height = 240;
@@ -14,7 +12,7 @@ exports.startWSServer = () => {
 	
 	var srv = ws.createServer(function (conn) {
 
-		console.log("Created");
+		console.log("WS server Created");
 		var streamHeader = new Buffer(8);
 		streamHeader.write(STREAM_MAGIC_BYTES);
 		streamHeader.writeUInt16BE(width, 4);
@@ -28,7 +26,7 @@ exports.startWSServer = () => {
 	    });
 
 	    conn.on("error", (err) => {
-		    console.log("Caught flash policy server socket error: ");
+		    console.log("Connection abruptly closed: ");
 		    console.log(err.stack);
 		});
 	});
