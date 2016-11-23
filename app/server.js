@@ -8,7 +8,7 @@ exports.startServer = (config,routeObj,actionObj) => {
 
 		var urlObj = url.parse(`http://${request.url}`);
 
-		response.writeHead(200,{'Content-Type':'text/plain'});
+		response.writeHead(200,{'Content-Type':'json'});
 		//response.end(urlObj.pathname);
 		var actionStr = routeObj.getCallback(urlObj.pathname.toLowerCase(),request.method.toLowerCase());
 		console.log(actionStr);

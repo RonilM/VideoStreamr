@@ -26,9 +26,6 @@ module.exports = (_config,_routeData) => {
 				console.log(routeData);
 				return null;
 			}
-			console.log(routeData);
-			console.log(path);
-			console.log(reqType);
 			return routeData[path][reqType];
 		}
 

@@ -15,6 +15,11 @@
 			"path": "/stream",
 			"requestType": "POST",
 			"action": "stream"
+		},
+		{
+			"path": "/streamfile",
+			"requestType": "GET",
+			"action": "streamFile"
 		}
 	]
 
