@@ -17,7 +17,6 @@ module.exports = (_config,_wsserver) => {
 				response.end(data);
 			});
 
-			
 
 		},
 
@@ -27,7 +26,8 @@ module.exports = (_config,_wsserver) => {
 			var query = urlObj.query;
 			var vidName = query.name;
 			var idx = query.index;
-			var cmd = (vidName == 'webcam')?"ffmpeg -s 640x480 -f avfoundation -i \"0\" -f mpeg1video -target pal-vcd http://localhost:4321/stream":"ffmpeg -i ./app/data/"+vidName+" -f mpeg1video -framerate 30 http://localhost:4321/stream?name="+vidName;
+			//var cmd = (vidName == 'webcam')?"ffmpeg -s 640x480 -f avfoundation -i \"0\" -f mpeg1video -target pal-vcd http://localhost:4321/stream":"ffmpeg -i ./app/data/"+vidName+" -f mpeg1video -framerate 30 http://localhost:4321/stream?name="+vidName;
+			var cmd = (vidName == 'webcam')?"/usr/bin/ffmpeg -f video4linux2 -i /dev/video0 -f mpeg1video http://localhost:4321/stream":"/usr/bin/ffmpeg -i ./app/data/"+vidName+"-f mpeg1video -framerate 30 http://localhost:4321/stream?name="+vidName;
 			exec(cmd, function (error, stdout, stderr) {
 			  console.log('stdout: ' + stdout);
 			  console.log('stderr: ' + stderr);
