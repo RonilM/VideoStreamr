@@ -11,7 +11,7 @@ var width = 320,
 exports.startWSServer = () => {
 	
 	var srv = ws.createServer(function (conn) {
-
+		console.log(conn.protocols[0]);
 		console.log("WS server Created");
 		var streamHeader = new Buffer(8);
 		streamHeader.write(STREAM_MAGIC_BYTES);
@@ -32,7 +32,7 @@ exports.startWSServer = () => {
 	});
 
 	srv.broadcast = function(data, opts) {
-
+		//Logic for subscribe
 		srv.connections.forEach(function (conn) {
 			conn.send(data,opts);
 		});
