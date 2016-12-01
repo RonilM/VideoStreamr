@@ -13,7 +13,7 @@
 	var canvas = document.getElementById('videoCanvas');
 	//var divi = document.getElementById('vidDiv');
 	
-	var client = new WebSocket( 'ws://localhost:8001/',"RonilData");
+	var client = new WebSocket( 'ws://localhost:8001/?arg1=roni');
 	var player = new jsmpeg(client, {canvas:canvas});
 
 
