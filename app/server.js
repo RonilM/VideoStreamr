@@ -28,13 +28,20 @@ exports.startWSServer = () => {
 	    conn.on("error", (err) => {
 		    console.log("Connection abruptly closed: ");
 		    console.log(err.stack);
+		    console.log("closing");
+		    conn.close();
 		});
 	});
 
 	srv.broadcast = function(data, opts) {
 		//Logic for subscribe
 		srv.connections.forEach(function (conn) {
-			conn.send(data,opts);
+			
+			var name = conn.path.split("=")[1];
+			if(name.toLowerCase() == opts.name.toLowerCase()) {
+				conn.send(data,opts);
+			}
+
 		});
 	}
 

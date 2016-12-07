@@ -1,30 +1,100 @@
+<html>
+	<head>
+		<style>
+			span {
+				font-size: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Test</h1>
 
-<h1>Test</h1>
+		<div class="container-fluid"> 
 
-<div id="vidDiv">
-	<canvas id="videoCanvas" width="640" height="480"></canvas>
-</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="container-fluid">
+						<!-- Thumbnails -->
+						<div class="row">
+							<span onclick="runVideo('webcam');" class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+							<!--<img onclick="runVideo('webcam');" src="..." alt="..." class="img-rounded">-->
+						</div>
+						<br/>
+						<div class="row">
+							<span onclick="runVideo('Carousselle.mp4');" class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						</div>
+					</div>
+				</div>		
+				<div class="col-md-8">
+					<div id="vidDiv" class="container-fluid">
+						<div id="videoCanvas" width="640" height="480"></div>
+					</div>
+				</div>		
+			</div>
+
+		</div>
+	</body>
+
+</html>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 <script type="text/javascript" src="http://localhost:4321/getjs?name=jsmpg.js"></script>
 
 <script>
-	
-	var canvas = document.getElementById('videoCanvas');
+
+	var wsCons = {};
+	var player;
+
+	var div = document.getElementById('videoCanvas');
+	div.innerHTML = "";
 	//var divi = document.getElementById('vidDiv');
-	
-	var client = new WebSocket( 'ws://localhost:8001/?arg1=roni');
-	var player = new jsmpeg(client, {canvas:canvas});
+	var canvas = document.createElement("canvas");
+	canvas.width = 640;
+	canvas.height = 480;
+	div.appendChild(canvas);
+
+	function runVideo(name) {
+		if(wsCons[name] == null) {
+			wsCons[name] = new WebSocket( 'ws://localhost:8001/?arg1='+name);
+		}
+
+		if(player) {
+
+			for(var key in wsCons) {
+				wsCons[key].onmessage = function(){};
+			}
+
+			player.client = wsCons[name];
+			player.client.onmessage = player.receiveSocketMessage.bind(player);
+			player.client.binaryType = 'arraybuffer';
+			//player.client.onopen = player.initSocketClient.bind(player);
+			console.log("Here");
+			//return;
+		}
+		else {
+			player = new jsmpeg(wsCons[name], {canvas:canvas});
+		}
+
+		
+		
+		
 
 
 
-	$.ajax({
-	  url: "streamfile",
-	  data: {
-	  			'name': 'webcam',//'Carousselle.mp4', //'webcam',
-	  		}
-	}).done(function(data) {});
-
+		$.ajax({
+		  url: "streamfile",
+		  data: {
+		  			'name': name //'Carousselle.mp4', //'webcam',
+		  		}
+		}).done(function(data) {});
+	}
 
 </script>
 

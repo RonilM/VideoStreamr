@@ -8,6 +8,7 @@ module.exports = (_config,_wsserver) => {
 
 	var config = _config;
 	var wsserver = _wsserver;
+	var streamBool = {};
 
 	return {
 
@@ -25,15 +26,26 @@ module.exports = (_config,_wsserver) => {
 			var urlObj = url.parse(request.url, true);
 			var query = urlObj.query;
 			var vidName = query.name;
+
+			if(streamBool[vidName]) {
+				console.log("Once-done");
+				return;
+			}
+			else {
+				streamBool[vidName] = true;
+			}
+
 			var idx = query.index;
-			//var cmd = (vidName == 'webcam')?"ffmpeg -s 640x480 -f avfoundation -i \"0\" -f mpeg1video -target pal-vcd http://localhost:4321/stream":"ffmpeg -i ./app/data/"+vidName+" -f mpeg1video -framerate 30 http://localhost:4321/stream?name="+vidName;
-			var cmd = (vidName == 'webcam')?"/usr/bin/ffmpeg -f video4linux2 -i /dev/video0 -f mpeg1video http://localhost:4321/stream":"/usr/bin/ffmpeg -i ./app/data/"+vidName+"-f mpeg1video -framerate 30 http://localhost:4321/stream?name="+vidName;
+			console.log("Starting stream: "+vidName);
+			var cmd = (vidName == 'webcam')?"ffmpeg -s 640x480 -f avfoundation -i \"0\" -f mpeg1video -target pal-vcd http://localhost:4321/stream?name="+vidName:"ffmpeg -s 640x480 -f avfoundation -i \"1\" -f mpeg1video -target pal-vcd http://localhost:4321/stream?name="+vidName;
+			//var cmd = (vidName == 'webcam')?"/usr/bin/ffmpeg -f video4linux2 -i /dev/video0 -f mpeg1video http://localhost:4321/stream":"/usr/bin/ffmpeg -i ./app/data/"+vidName+"-f mpeg1video -framerate 30 http://localhost:4321/stream?name="+vidName;
 			exec(cmd, function (error, stdout, stderr) {
-			  console.log('stdout: ' + stdout);
-			  console.log('stderr: ' + stderr);
+			  //console.log('stdout: ' + stdout);
+			  //console.log('stderr: ' + stderr);
 			  if (error !== null) {
 			    console.log('exec error: ' + error);
 			  }
+
 			});
 
 			response.end("");
@@ -41,9 +53,12 @@ module.exports = (_config,_wsserver) => {
 
 		stream: (request,response) => {
 			response.connection.setTimeout(0);
+			var urlObj = url.parse(request.url, true);
+			var query = urlObj.query;
+			var vidName = query.name;
 			var body = [];
 			request.on('data', function(chunk) {
-			  wsserver.broadcast(chunk, {binary:true});
+			  wsserver.broadcast(chunk, {binary:true,name:vidName});
 			}).on('end', function() {
 				wsserver.close();
 				response.end("");
