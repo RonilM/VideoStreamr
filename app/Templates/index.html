@@ -1,36 +1,117 @@
 <html>
 	<head>
 		<style>
-			span {
-				font-size: 50px;
-			}
+			
+
+		body {
+		width: 80%;
+		margin: 0 auto !important;
+		}
+					span {
+						font-size: 50px;
+					}		
+		div.container {
+		    width: 100%;
+		    border: 1px solid gray;
+		}
+
+		header, footer {
+		    padding: 1em;
+		    color: white;
+		    background-color: #4a4a4a;
+		    clear: left;
+		    text-align: center;
+		}
+
+		nav {    
+		    max-width: 160px;
+		    margin: 0;
+		    padding: 1em;
+		}
+
+		nav ul {
+		    list-style-type: none;
+		    padding: 0;
+		}
+		   
+		nav ul a {
+		    text-decoration: none;
+		}
+
+		.glyphicon {
+		font-size: 50px;
+		padding: 15px;
+		}
+		article {
+		    
+		    overflow: hidden;
+		}
+
+		
 		</style>
 	</head>
 	<body>
-		<h1>Streams</h1>
+		<header>
+   <h1>Currently Streaming</h1>
+</header>
 
 		<div class="container-fluid"> 
 
-			<div class="row">
-				<div class="col-md-4">
-					<div class="container-fluid">
+			<div class="row" style="border: 2px solid #000000">
+				<div class="col-sm-3 col-xs-3 text-center">
+         <h3> Options </h3>
+         
+         <br>
+					<div class="container-fluid text-center">
 						<!-- Thumbnails -->
-						<div class="row">
-							<span onclick="runVideo('webcam');" class="glyphicon glyphicon-camera" aria-hidden="true"></span>
-							<!--<img onclick="runVideo('webcam');" src="..." alt="..." class="img-rounded">-->
+						<nav>
+						<ul>
+						<div class="row text-center">
+<div class="thumbnail">
+              <span onclick="runVideo('webcam');" class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+            </div>
+							
+							
 						</div>
 						<br/>
-						<div class="row">
-							<span onclick="runVideo('out.mp4');" class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						<div class="row text-center">
+<div class="thumbnail">
+							<span onclick="runVideo('Carousselle.mp4');" class="glyphicon glyphicon-search" aria-hidden="true"></span> </div>
+						</div>
+						</ul>
+						</nav>
+					</div>
+				</div>	
+				
+				<div class="col-sm-9 col-xs-9" style="border-left: 2px solid #000000">
+
+					<div class="row">
+						<div id="vidDiv" class="container-fluid text-center">
+							<div id="videoCanvas" width="640" height="480"></div>
 						</div>
 					</div>
-				</div>		
-				<div class="col-md-8">
-					<div id="vidDiv" class="container-fluid">
-						<div id="videoCanvas" width="640" height="480"></div>
-					</div>
-				</div>		
+
+					<hr style="border:1px solid #000000;">
+        <div class="text-center"> All videos </div>
+       <hr style="border:1px solid #000000;">
+        <div class="container-fluid">
+          
+          <div class="col-sm-3 text-center">
+            <div class="thumbnail">
+              <span onclick="runVideo('webcam');" class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+            </div>
+          </div>
+          
+           <div class="col-sm-3 text-center">
+            <div class="thumbnail">
+              <span onclick="runVideo('out.mp4');" class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </div>
+          </div>
+</div>
+				</div>					
 			</div>
+				
+			
 
 		</div>
 	</body>
